@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Password Manager</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div id="app">
+            <header class="app-header">
+                <!-- <h1>Password Manager</h1> -->
+                <div class="toolbar-buttons">
+                    <div class="toolbar-left">
+                        <button id="add-entry-btn" class="toolbar-btn-labeled" title="Add Entry">
+                            <i class="fa-solid fa-plus btn-icon"></i>
+                            <span class="btn-label">Add</span>
+                        </button>
+                        <button
+                            id="delete-entry-btn"
+                            class="toolbar-btn-labeled"
+                            title="Delete Selected"
+                        >
+                            <i class="fa-solid fa-trash btn-icon"></i>
+                            <span class="btn-label">Delete</span>
+                        </button>
+                        <button
+                            id="copy-entry-btn"
+                            class="toolbar-btn-labeled"
+                            title="Duplicate Selected"
+                        >
+                            <i class="fa-solid fa-clone btn-icon"></i>
+                            <span class="btn-label">Duplicate</span>
+                        </button>
+                        <div class="toolbar-spacer"></div>
+                        <button id="import-csv-btn" class="toolbar-btn-labeled" title="Import CSV">
+                            <i class="fa-solid fa-file-import btn-icon"></i>
+                            <span class="btn-label">Import</span>
+                        </button>
+                        <button id="export-csv-btn" class="toolbar-btn-labeled" title="Export CSV">
+                            <i class="fa-solid fa-file-export btn-icon"></i>
+                            <span class="btn-label">Export</span>
+                        </button>
+                        <div class="toolbar-spacer"></div>
+                        <button
+                            id="toolbar-generate-btn"
+                            class="toolbar-btn-labeled"
+                            title="Generate Password"
+                        >
+                            <i class="fa-solid fa-wand-magic-sparkles btn-icon"></i>
+                            <span class="btn-label">Generate</span>
+                        </button>
+                    </div>
+                    <div class="toolbar-right">
+                        <button id="settings-btn" class="toolbar-btn" title="Settings">
+                            <i class="fa-solid fa-gear"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <main class="app-main">
+                <section class="grid-panel">
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="search-input"
+                        placeholder="Search by name, category, URL, or username"
+                    />
+                    <table class="password-grid">
+                        <thead>
+                            <tr>
+                                <th class="col-name">
+                                    <button
+                                        id="sort-passwords-btn"
+                                        class="sort-header-btn"
+                                        title="Sort by name"
+                                    >
+                                        Passwords <i class="fa-solid fa-sort-up"></i>
+                                    </button>
+                                </th>
+                                <th class="col-updated">
+                                    <button
+                                        id="sort-updated-btn"
+                                        class="sort-header-btn"
+                                        title="Sort by date"
+                                    >
+                                        Last Updated <i class="fa-solid fa-sort"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="password-grid-body"></tbody>
+                    </table>
+                </section>
+                <section class="detail-panel">
+                    <h2>Details</h2>
+                    <form id="detail-form">
+                        <div class="form-row">
+                            <label for="name">Name</label>
+                            <div class="input-with-button">
+                                <input type="text" id="name" name="name" />
+                                <button
+                                    type="button"
+                                    id="copy-name-btn"
+                                    class="icon-button"
+                                    title="Copy name"
+                                >
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label for="url">URL</label>
+                            <div class="input-with-button">
+                                <input type="url" id="url" name="url" />
+                                <button
+                                    type="button"
+                                    id="launch-url-btn"
+                                    class="icon-button"
+                                    title="Open URL"
+                                >
+                                    <i class="fa-solid fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label for="category">Category</label>
+                            <div class="input-with-button">
+                                <input type="text" id="category" name="category" />
+                                <button
+                                    type="button"
+                                    id="copy-category-btn"
+                                    class="icon-button"
+                                    title="Copy category"
+                                >
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label for="username">Username</label>
+                            <div class="input-with-button">
+                                <input type="text" id="username" name="username" />
+                                <button
+                                    type="button"
+                                    id="copy-username-btn"
+                                    class="icon-button"
+                                    title="Copy username"
+                                >
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-row password-row">
+                            <label for="password">Password</label>
+                            <div class="input-with-button">
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="password" name="password" />
+                                    <button
+                                        type="button"
+                                        id="toggle-password"
+                                        class="icon-button-inline"
+                                        aria-label="Show password"
+                                    >
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+                                <button
+                                    type="button"
+                                    id="generate-password-btn"
+                                    class="icon-button"
+                                    title="Generate password"
+                                >
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    id="copy-password-btn"
+                                    class="icon-button"
+                                    title="Copy password"
+                                >
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" name="notes" rows="4"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="save-btn" class="primary">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                            </button>
+                            <button type="button" id="discard-btn" class="secondary">
+                                <i class="fa-solid fa-xmark"></i> Discard Changes
+                            </button>
+                            <button type="button" id="history-btn" class="secondary">
+                                <i class="fa-solid fa-clock-rotate-left"></i> View History
+                            </button>
+                        </div>
+                        <div class="lock-button-container">
+                            <button type="button" id="lock-btn" class="lock-button">
+                                <i class="fa-solid fa-lock"></i> Lock App
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </main>
+        </div>
+
+        <div id="master-password-modal" class="modal" aria-hidden="false" style="display: flex">
+            <div class="modal-backdrop"></div>
+            <div
+                class="modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="master-password-title"
+            >
+                <header class="modal-header">
+                    <h2 id="master-password-title">Master Password</h2>
+                </header>
+                <div class="modal-body">
+                    <div id="master-password-create-form" style="display: none">
+                        <p>Set up a master password to protect your data:</p>
+                        <div class="form-row">
+                            <label for="master-password-input">Master Password</label>
+                            <input type="password" id="master-password-input" />
+                        </div>
+                        <div class="form-row">
+                            <label for="master-password-confirm">Confirm Password</label>
+                            <input type="password" id="master-password-confirm" />
+                        </div>
+                        <button type="button" id="master-password-create-btn" class="primary">
+                            Create Master Password
+                        </button>
+                    </div>
+                    <div id="master-password-verify-form" style="display: none">
+                        <p>Enter your master password to continue:</p>
+                        <div class="form-row">
+                            <label for="master-password-verify-input">Master Password</label>
+                            <input type="password" id="master-password-verify-input" />
+                        </div>
+                        <button type="button" id="master-password-verify-btn" class="primary">
+                            Unlock
+                        </button>
+                        <p
+                            id="master-password-error"
+                            style="color: red; margin-top: 10px; display: none"
+                        >
+                            Incorrect password
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-modal" class="modal hidden" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div
+                class="modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="settings-modal-title"
+            >
+                <header class="modal-header">
+                    <h2 id="settings-modal-title">Settings</h2>
+                    <button
+                        type="button"
+                        id="settings-close-btn"
+                        class="icon-button"
+                        aria-label="Close"
+                    >
+                        ✕
+                    </button>
+                </header>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <label>Theme</label>
+                        <button
+                            type="button"
+                            id="theme-toggle-btn"
+                            class="secondary"
+                            style="width: auto; padding: 8px 16px"
+                        >
+                            <i class="fa-solid fa-sun"></i> <span id="theme-label">Light</span>
+                        </button>
+                    </div>
+                    <div class="form-row">
+                        <label for="timeout-select">Auto-lock timeout</label>
+                        <select id="timeout-select">
+                            <option value="0">Never</option>
+                            <option value="1">1 minute</option>
+                            <option value="5">5 minutes</option>
+                            <option value="10">10 minutes</option>
+                            <option value="15">15 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="60">1 hour</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>Master Password</label>
+                        <button
+                            type="button"
+                            id="change-master-password-btn"
+                            class="secondary"
+                            style="width: auto; padding: 8px 16px"
+                        >
+                            <i class="fa-solid fa-key"></i> Change Master Password
+                        </button>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" id="settings-save-btn" class="primary">Save</button>
+                </footer>
+            </div>
+        </div>
+
+        <div id="change-master-password-modal" class="modal hidden" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div
+                class="modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="change-master-password-title"
+            >
+                <header class="modal-header">
+                    <h2 id="change-master-password-title">Change Master Password</h2>
+                    <button
+                        type="button"
+                        id="change-master-password-close-btn"
+                        class="icon-button"
+                        aria-label="Close"
+                    >
+                        ✕
+                    </button>
+                </header>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <label for="current-master-password">Current Password</label>
+                        <input type="password" id="current-master-password" />
+                    </div>
+                    <div class="form-row">
+                        <label for="new-master-password">New Password</label>
+                        <input type="password" id="new-master-password" />
+                    </div>
+                    <div class="form-row">
+                        <label for="confirm-new-master-password">Confirm New Password</label>
+                        <input type="password" id="confirm-new-master-password" />
+                    </div>
+                    <p
+                        id="change-master-password-error"
+                        style="color: red; margin-top: 10px; display: none"
+                    ></p>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" id="change-master-password-cancel-btn" class="secondary">
+                        Cancel
+                    </button>
+                    <button type="button" id="change-master-password-save-btn" class="primary">
+                        Change Password
+                    </button>
+                </footer>
+            </div>
+        </div>
+
+        <div id="custom-dialog-modal" class="modal hidden" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div
+                class="modal-content dialog-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="dialog-title"
+            >
+                <header class="modal-header">
+                    <h2 id="dialog-title"></h2>
+                </header>
+                <div class="modal-body">
+                    <p id="dialog-message"></p>
+                </div>
+                <footer class="modal-footer">
+                    <button
+                        type="button"
+                        id="dialog-cancel-btn"
+                        class="secondary"
+                        style="display: none"
+                    >
+                        Cancel
+                    </button>
+                    <button type="button" id="dialog-ok-btn" class="primary">OK</button>
+                </footer>
+            </div>
+        </div>
+
+        <div id="generate-password-modal" class="modal hidden" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div
+                class="modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="generate-password-title"
+            >
+                <header class="modal-header">
+                    <h2 id="generate-password-title">Generate Password</h2>
+                    <button
+                        type="button"
+                        id="generate-close-btn"
+                        class="icon-button"
+                        aria-label="Close"
+                    >
+                        ✕
+                    </button>
+                </header>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <label for="gen-length"
+                            >Length: <span id="gen-length-value">16</span></label
+                        >
+                        <input type="range" id="gen-length" min="4" max="30" value="16" />
+                    </div>
+                    <div class="gen-options-grid">
+                        <div class="form-row">
+                            <label>
+                                <input type="checkbox" id="gen-uppercase" checked />
+                                <span>Uppercase (A-Z)</span>
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                <input type="checkbox" id="gen-lowercase" checked />
+                                <span>Lowercase (a-z)</span>
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                <input type="checkbox" id="gen-numbers" checked />
+                                <span>Numbers (0-9)</span>
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                <input type="checkbox" id="gen-symbols" checked />
+                                <span>Symbols (!@#$%^&*)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="gen-preview">Preview</label>
+                        <div class="input-with-button">
+                            <input type="text" id="gen-preview" readonly />
+                            <button
+                                type="button"
+                                id="gen-copy-btn"
+                                class="icon-button"
+                                title="Copy password"
+                            >
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                            <button
+                                type="button"
+                                id="gen-refresh-btn"
+                                class="icon-button"
+                                title="Regenerate"
+                            >
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" id="generate-cancel-btn" class="secondary">Cancel</button>
+                    <button
+                        type="button"
+                        id="generate-copy-footer-btn"
+                        class="secondary"
+                        style="display: none"
+                    >
+                        <i class="fa-solid fa-copy"></i> Copy Password
+                    </button>
+                    <button type="button" id="generate-use-btn" class="primary">
+                        Use Password
+                    </button>
+                </footer>
+            </div>
+        </div>
+
+        <div id="history-modal" class="modal hidden" aria-hidden="true">
+            <div class="modal-backdrop"></div>
+            <div
+                class="modal-content history-modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="history-modal-title"
+            >
+                <header class="modal-header">
+                    <h2 id="history-modal-title">Password History</h2>
+                    <button
+                        type="button"
+                        id="history-close-btn"
+                        class="icon-button"
+                        aria-label="Close history"
+                    >
+                        ✕
+                    </button>
+                </header>
+                <div class="modal-body">
+                    <div class="history-controls">
+                        <label for="history-limit"
+                            >Keep last N passwords for this entry (0 = unlimited):</label
+                        >
+                        <input type="number" id="history-limit" min="0" />
+                        <button type="button" id="history-apply-limit" class="secondary">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Limit
+                        </button>
+                        <button type="button" id="history-clear" class="secondary danger">
+                            <i class="fa-solid fa-trash"></i> Clear History
+                        </button>
+                    </div>
+                    <table class="history-grid">
+                        <thead>
+                            <tr>
+                                <th>Changed At</th>
+                                <th>Password</th>
+                                <th>&nbsp;&nbsp;Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-grid-body"></tbody>
+                    </table>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" id="history-done" class="primary">Done</button>
+                </footer>
+            </div>
+        </div>
+        <script type="module" src="dist/renderer.js"></script>
+    </body>
+</html>

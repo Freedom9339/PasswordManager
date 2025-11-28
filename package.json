@@ -1,0 +1,74 @@
+{
+    "name": "passwordmanager",
+    "version": "1.0.0",
+    "description": "Simple Electron password manager",
+    "main": "dist/main.js",
+    "scripts": {
+        "start": "npm run build && electron .",
+        "build": "tsc && tsc -p tsconfig.preload.json",
+        "pack": "npm run build && electron-builder --dir",
+        "dist": "npm run build && electron-builder",
+        "dist:win": "npm run build && electron-builder --win",
+        "dist:linux": "npm run build && electron-builder --linux",
+        "lint": "eslint src/**/*.ts",
+        "lint:fix": "eslint src/**/*.ts --fix",
+        "format": "prettier --write \"src/**/*.{ts,js,json}\" \"*.{html,css,json}\"",
+        "format:check": "prettier --check \"src/**/*.{ts,js,json}\" \"*.{html,css,json}\""
+    },
+    "keywords": [],
+    "author": {
+        "name": "Reynaldo Rea",
+        "email": "Reynaldo.rea48@outlook.com"
+    },
+    "homepage": "https://github.com/Freedom9339/PasswordManager",
+    "license": "MIT",
+    "type": "module",
+    "devDependencies": {
+        "@types/crypto-js": "^4.2.2",
+        "@types/node": "^22.10.1",
+        "@typescript-eslint/eslint-plugin": "^8.48.0",
+        "@typescript-eslint/parser": "^8.48.0",
+        "electron": "^39.2.3",
+        "electron-builder": "^26.0.12",
+        "eslint": "^9.39.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "prettier": "^3.7.2",
+        "typescript": "^5.6.3"
+    },
+    "dependencies": {
+        "crypto-js": "^4.2.0",
+        "sql.js": "^1.12.0"
+    },
+    "build": {
+        "appId": "com.passwordmanager.app",
+        "productName": "Password Manager",
+        "files": [
+            "dist/**/*",
+            "dist-preload/**/*",
+            "index.html",
+            "styles.css",
+            "icon.png",
+            "icon512.png",
+            "node_modules/**/*"
+        ],
+        "directories": {
+            "output": "release"
+        },
+        "win": {
+            "target": [
+                "nsis",
+                "portable"
+            ],
+            "icon": "icon.png"
+        },
+        "linux": {
+            "target": [
+                "AppImage",
+                "deb"
+            ],
+            "icon": "icon512.png",
+            "category": "Utility"
+        }
+    }
+}

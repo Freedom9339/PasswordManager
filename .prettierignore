@@ -1,0 +1,8 @@
+dist/
+dist-preload/
+release/
+node_modules/
+*.asar
+*.AppImage
+*.exe
+*.blockmap
